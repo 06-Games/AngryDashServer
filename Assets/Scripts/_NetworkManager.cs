@@ -24,6 +24,9 @@ public class _NetworkManager : NetworkBehaviour
 
     public void LoadMap()
     {
+        if (ConfigAPI.GetInt("players.limit") < 1)
+            ConfigAPI.SetInt("players.limit", GetComponent<NetworkManager>().maxConnections = 50);
+        GetComponent<NetworkManager>().maxConnections = ConfigAPI.GetInt("players.limit");
         m_Message = new MyMsgBase();
 
         string path = Application.dataPath;

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ConfigAPI
 {
-#if !UNITY_EDITOR
+#if UNITY_EDITOR
     static string configPath = "C:\\Users\\evan\\Documents\\Unity\\Compiller\\Angry Dash Server\\1.0\\config.ini";
 #elif UNITY_STANDALONE
         static string[] Path = Application.dataPath.Split(new string[2] { "/", "\\" }, System.StringSplitOptions.None);
@@ -15,19 +15,24 @@ public class ConfigAPI
     static string configPath = Application.dataPath + "/config.ini";
 #endif
 
+    static string[] config = null;
+    public static void Reload()
+    {
+        if (File.Exists(configPath))
+            config = File.ReadAllLines(configPath);
+        else config = null;
+
+        Log.Reload();
+    }
+
     public static string GetString(string d)
     {
         string id = d + " = ";
-
-        if (File.Exists(configPath))
-        {
-            string[] lines = File.ReadAllLines(configPath);
-            for (int i = 0; i < lines.Length; i++)
+            for (int i = 0; i < config.Length; i++)
             {
-                if (lines[i].Contains(id))
-                    return lines[i].Replace(id, "");
+                if (config[i].Contains(id))
+                    return config[i].Replace(id, "");
             }
-        }
         return null;
     }
 
@@ -52,18 +57,17 @@ public class ConfigAPI
         return b;
     }
 
-    static bool ParmExist(string d)
+    public static bool ParamExist(string d)
     {
         string id = d + " = ";
 
         if (!File.Exists(configPath))
             File.CreateText(configPath);
 
-        string[] lines = File.ReadAllLines(configPath);
         int l = -1;
-        for (int i = 0; i < lines.Length; i++)
+        for (int i = 0; i < config.Length; i++)
         {
-            if (lines[i].Contains(id))
+            if (config[i].Contains(id))
                 l = i;
         }
 
@@ -73,9 +77,9 @@ public class ConfigAPI
     {
         string id = d + " = ";
 
-        string[] lines = new string[5] { "# Angry Dash config file", "# Edit this carefully", "# 06Games,", "# All rights reserved", "" };
-        if(File.Exists(configPath))
-            lines = File.ReadAllLines(configPath);
+        string[] lines = new string[4] { "# Angry Dash Server config file", "# 06Games,", "# All rights reserved", "" };
+        if (config != null)
+            lines = config;
         int l = -1;
         for (int i = 0; i < lines.Length; i++)
         {

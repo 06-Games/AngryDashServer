@@ -15,27 +15,37 @@ using System.Linq;
 
 public class Log : MonoBehaviour {
     
-    
+    public static void Reload()
+    {
+        if(!ConfigAPI.ParamExist("server.create_log"))
+            ConfigAPI.SetBool("server.create_log", true);
+        CreateLog = ConfigAPI.GetBool("server.create_log");
+    }
+    static bool CreateLog = true;
+
     void OnEnable() { Application.logMessageReceived += HandleLog; }
     void OnDisable() { Application.logMessageReceived -= HandleLog; }
     void HandleLog(string logString, string stackTrace, LogType type)
     {
-#if UNITY_EDITOR
-        UnityThread.executeInUpdate(() =>
+#if !UNITY_EDITOR
+        if (CreateLog)
         {
-            string[] trace = stackTrace.Split(new string[1] { "\n" }, StringSplitOptions.None);
-            stackTrace = "";
-            for (int i = 0; i < trace.Length - 1; i++)
-                stackTrace = stackTrace + "\n\t\t" + trace[i];
+            UnityThread.executeInUpdate(() =>
+            {
+                string[] trace = stackTrace.Split(new string[1] { "\n" }, StringSplitOptions.None);
+                stackTrace = "";
+                for (int i = 0; i < trace.Length - 1; i++)
+                    stackTrace = stackTrace + "\n\t\t" + trace[i];
 
-            string fileText = "";
-            if (File.Exists(pathToActualLogMessage()))
-                fileText = File.ReadAllText(pathToActualLogMessage());
+                string fileText = "";
+                if (File.Exists(pathToActualLogMessage()))
+                    fileText = File.ReadAllText(pathToActualLogMessage());
 
-            string current = "[" + DateTime.Now.ToString("HH:mm:ss") + "] " + logString + stackTrace + "\n\n";
-            string line = fileText + current;
-            File.WriteAllText(pathToActualLogMessage(), line);
-        });
+                string current = "[" + DateTime.Now.ToString("HH:mm:ss") + "] " + logString + stackTrace + "\n\n";
+                string line = fileText + current;
+                File.WriteAllText(pathToActualLogMessage(), line);
+            });
+        }
 #endif
     }
     public static void LogNewMessage(string logString, bool inEditor = false, string stackTrace = null)
@@ -44,7 +54,7 @@ public class Log : MonoBehaviour {
 #if UNITY_EDITOR
         go = inEditor;
 #endif
-        if (go)
+        if (go & CreateLog)
         {
             UnityThread.executeInUpdate(() =>
             {

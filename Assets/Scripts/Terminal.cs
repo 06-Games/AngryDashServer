@@ -17,6 +17,7 @@ public class Terminal : MonoBehaviour {
     void Start()
     {
         Viewport = transform.GetChild(0).GetChild(0).GetChild(0).gameObject;
+        ConfigAPI.Reload();
         Net.StartServer();
         Message("Server start");
     }
@@ -60,6 +61,8 @@ public class Terminal : MonoBehaviour {
             }
             else if (cmd == "reload")
             {
+                ConfigAPI.Reload();
+                Message("The config file has been reload");
                 Net.LoadMap();
                 Message("The map has been reload");
             }
@@ -77,20 +80,18 @@ public class Terminal : MonoBehaviour {
         IF.text = "";
     }
 
-    public void Message(string content, int type = 0)
+    public void Message(string msg, int type = 0)
     {
         string DT = "";
         if (type == 0)
             DT = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ";
-
-        string msg = DT + content;
 
         if (type == 0)
             Log.LogNewMessage(msg, true);
 
         GameObject newText = Instantiate(textObject, Viewport.transform);
         Messages newMessages = new Messages();
-        newMessages.text = msg;
+        newMessages.text = DT + msg;
         newMessages.textObject = newText.GetComponent<Text>();
         newMessages.type = type;
 
