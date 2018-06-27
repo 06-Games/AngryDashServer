@@ -27,6 +27,7 @@ public class _NetworkManager : NetworkBehaviour
         if (ConfigAPI.GetInt("players.limit") < 1)
             ConfigAPI.SetInt("players.limit", GetComponent<NetworkManager>().maxConnections = 50);
         GetComponent<NetworkManager>().maxConnections = ConfigAPI.GetInt("players.limit");
+
         m_Message = new MyMsgBase();
 
         string path = Application.dataPath;
@@ -34,7 +35,7 @@ public class _NetworkManager : NetworkBehaviour
         path = "C:\\Users\\evan\\Documents\\Unity\\Compiller\\Angry Dash Server\\1.0";
 #elif UNITY_STANDALONE
         string[] Path = Application.dataPath.Split(new string[2] { "/", "\\" }, System.StringSplitOptions.None);
-        path = Application.dataPath.Replace(Path[Path.Length - 1], "");
+        path = Application.dataPath.Replace(Path[Path.Length - 1]+"/", "");
 #endif
         if (!File.Exists(path + "map.level"))
             File.WriteAllText(path + "map.level", "Blocks {\n1.0; (0.0, 0.0, 0.0); 0; FF0000255; 0\n1.0; (0.0, 5.0, 0.0); 0; FF0000255; 0\n}");
