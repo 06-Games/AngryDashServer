@@ -60,18 +60,18 @@ public class ConfigAPI
     public static bool ParamExist(string d)
     {
         string id = d + " = ";
-
-        if (!File.Exists(configPath))
-            File.CreateText(configPath);
-
-        int l = -1;
-        for (int i = 0; i < config.Length; i++)
+        if (config != null)
         {
-            if (config[i].Contains(id))
-                l = i;
-        }
+            int l = -1;
+            for (int i = 0; i < config.Length; i++)
+            {
+                if (config[i].Contains(id))
+                    l = i;
+            }
 
-        return l > -1;
+            return l > -1;
+        }
+        else return false;
     }
     public static void SetString(string d, string p)
     {

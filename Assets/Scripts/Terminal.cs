@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.IO;
 
 public class Terminal : MonoBehaviour {
 
@@ -68,7 +69,9 @@ public class Terminal : MonoBehaviour {
             }
             else if (cmd == "info")
             {
-                Message(Net.player + " players connected", 1);
+                if(Net.player > 1)
+                    Message(Net.player + " players connected", 1);
+                else Message(Net.player + " player connected", 1);
                 Message("", 1);
                 Message("Angry Dash Server v" + Application.version, 1);
                 Message("Coded by EvanG", 1);

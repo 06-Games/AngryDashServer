@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 50529230989865952}
   - component: {fileID: 58128718382601564}
   - component: {fileID: 212664551128490190}
-  - component: {fileID: 114739312834396952}
   - component: {fileID: 114815818603605592}
   - component: {fileID: 114575301069274642}
   m_Layer: 0
@@ -101,29 +100,6 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
---- !u!114 &114739312834396952
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1292801592918698}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55dd6cda717aa0a44a079b5ea6f49c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LP: {fileID: 0}
-  JoyStick: {fileID: 0}
-  Sensibility: 0b0000000d000000
-  Sesibility: 6
-  "Arriv\xE9": {fileID: 1352537036461070, guid: c744c374b1b61d54099377b85582ddc1,
-    type: 2}
-  Parents: {fileID: 0}
-  Ar: {x: 0, y: 0}
-  PeutAvancer: 1
-  PositionInitiale: {x: 0, y: 0}
-  move: 0
-  vitesse: 1
 --- !u!114 &114815818603605592
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -196,5 +172,5 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
