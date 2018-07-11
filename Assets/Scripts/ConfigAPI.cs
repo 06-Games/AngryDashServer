@@ -7,7 +7,7 @@ using UnityEngine;
 public class ConfigAPI
 {
 #if UNITY_EDITOR
-    static string configPath = "C:\\Users\\evan\\Documents\\Unity\\Compiller\\Angry Dash Server\\"+Application.version+"\\config.ini";
+    static string configPath = "C:\\Users\\evan\\Documents\\Unity\\Compiller\\Angry Dash Server\\"+ Application.version + "\\config.ini";
 #elif UNITY_STANDALONE
         static string[] Path = Application.dataPath.Split(new string[2] { "/", "\\" }, System.StringSplitOptions.None);
         static string configPath = Application.dataPath.Replace(Path[Path.Length - 1], "") + "/config.ini";
@@ -18,9 +18,9 @@ public class ConfigAPI
     static string[] config = null;
     public static void Reload()
     {
-        if (File.Exists(configPath))
-            config = File.ReadAllLines(configPath);
-        else config = null;
+        if (!File.Exists(configPath))
+            File.WriteAllLines(configPath, new string[4] { "# Angry Dash Server config file", "# 06Games,", "# All rights reserved", "" });
+        config = File.ReadAllLines(configPath);
 
         Log.Reload();
     }
@@ -92,6 +92,7 @@ public class ConfigAPI
         else lines[l] = id + p;
 
         File.WriteAllLines(configPath, lines);
+        config = lines;
     }
 
     public static void SetBool(string d, bool p) { SetString(d, p.ToString()); }
