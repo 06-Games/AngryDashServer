@@ -35,7 +35,7 @@ public class _NetworkManager : NetworkBehaviour
     {
         LoadMap();
 
-        GetComponent<NetworkManager>().StartHost();
+        //GetComponent<NetworkManager>().StartHost();
         NetworkServer.RegisterHandler(MsgID.AskForServerInfo, RequestInfo);
         NetworkServer.RegisterHandler(MsgID.AskForServerMap, MapRequestReceive);
         player = 0;
@@ -44,7 +44,7 @@ public class _NetworkManager : NetworkBehaviour
     {
         ServInfo info = new ServInfo();
 #if UNITY_EDITOR
-        string path = "C:\\Users\\evan\\Documents\\Unity\\Compiller\\Angry Dash Server\\1.0\\";
+        string path = "C:\\Users\\evan\\Documents\\Unity\\Compiller\\Angry Dash Server\\"+Application.version+"\\";
 #elif UNITY_STANDALONE
         string[] Path = Application.dataPath.Split(new string[2] { "/", "\\" }, System.StringSplitOptions.None);
         string path = Application.dataPath.Replace(Path[Path.Length - 1], "");
@@ -64,12 +64,12 @@ public class _NetworkManager : NetworkBehaviour
 
     public void LoadMap()
     {
-        if (ConfigAPI.GetInt("players.limit") < 1)
+        if (ConfigAPI.GetInt("players.limit") < 1 | !ConfigAPI.ParamExist("players.limit"))
             ConfigAPI.SetInt("players.limit", 50);
         GetComponent<NetworkManager>().maxConnections = ConfigAPI.GetInt("players.limit");
 
-        if (ConfigAPI.GetInt("server.port") < 1 | ConfigAPI.GetInt("server.port") > 65535)
-            ConfigAPI.SetInt("server.port", 7);
+        if (ConfigAPI.GetInt("server.port") < 500 | ConfigAPI.GetInt("server.port") > 65535 | !ConfigAPI.ParamExist("server.port"))
+            ConfigAPI.SetInt("server.port", 7777);
         if (ConfigAPI.GetInt("server.port") != GetComponent<NetworkManager>().networkPort)
         {
             GetComponent<NetworkManager>().networkPort = ConfigAPI.GetInt("server.port");
@@ -84,7 +84,7 @@ public class _NetworkManager : NetworkBehaviour
 
         string path = Application.dataPath;
 #if UNITY_EDITOR
-        path = "C:\\Users\\evan\\Documents\\Unity\\Compiller\\Angry Dash Server\\1.0\\";
+        path = "C:\\Users\\evan\\Documents\\Unity\\Compiller\\Angry Dash Server\\"+Application.version+"\\";
 #elif UNITY_STANDALONE
         string[] Path = Application.dataPath.Split(new string[2] { "/", "\\" }, System.StringSplitOptions.None);
         path = Application.dataPath.Replace(Path[Path.Length - 1], "");
@@ -93,6 +93,11 @@ public class _NetworkManager : NetworkBehaviour
             File.WriteAllText(path + "map.level", DefaultMap.text);
 
         m_Message.map = File.ReadAllText(path + "map.level");
+
+        if (!ConfigAPI.ParamExist("map.reloadForPlayers"))
+            ConfigAPI.SetBool("map.reloadForPlayers", true);
+        if (ConfigAPI.GetBool("map.reloadForPlayers"))
+            NetworkServer.SendToAll(MsgID.SendServerMap, m_Message);
     }
 
     public void Disconnect()
