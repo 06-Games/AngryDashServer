@@ -7,7 +7,7 @@ using UnityEngine;
 public class ConfigAPI
 {
 #if UNITY_EDITOR
-    static string configPath = "C:\\Users\\evan\\Documents\\Unity\\Compiller\\Angry Dash Server\\1.0\\config.ini";
+    static string configPath = "C:\\Users\\evan\\Documents\\Unity\\Compiller\\Angry Dash Server\\"+Application.version+"\\config.ini";
 #elif UNITY_STANDALONE
         static string[] Path = Application.dataPath.Split(new string[2] { "/", "\\" }, System.StringSplitOptions.None);
         static string configPath = Application.dataPath.Replace(Path[Path.Length - 1], "") + "/config.ini";

@@ -79,7 +79,7 @@ public class Log : MonoBehaviour {
     public static string pathToActualLogMessage() {
         string path = Application.dataPath;
 #if UNITY_EDITOR
-        path = "C:\\Users\\evan\\Documents\\Unity\\Compiller\\Angry Dash Server\\1.0\\logs\\";
+        path = "C:\\Users\\evan\\Documents\\Unity\\Compiller\\Angry Dash Server\\"+Application.version+"\\logs\\";
 #elif UNITY_STANDALONE
         string[] Path = Application.dataPath.Split(new string[2] { "/", "\\" }, System.StringSplitOptions.None);
         path = Application.dataPath.Replace(Path[Path.Length - 1], "") + "/logs/";
