@@ -39,6 +39,20 @@ public class _NetworkManager : NetworkBehaviour
         NetworkServer.RegisterHandler(MsgID.AskForServerInfo, RequestInfo);
         NetworkServer.RegisterHandler(MsgID.AskForServerMap, MapRequestReceive);
         player = 0;
+
+
+#if UNITY_EDITOR
+        string path = "C:\\Users\\evan\\Documents\\Unity\\Compiller\\Angry Dash Server\\" + Application.version + "\\";
+#elif UNITY_STANDALONE
+        string[] Path = Application.dataPath.Split(new string[2] { "/", "\\" }, System.StringSplitOptions.None);
+        string path = Application.dataPath.Replace(Path[Path.Length - 1], "");
+#endif
+        if (string.IsNullOrEmpty(ConfigAPI.GetString("server.icon")))
+            ConfigAPI.SetString("server.icon", "icon.png");
+        if (!File.Exists(path + ConfigAPI.GetString("server.icon")))
+            File.WriteAllBytes(path + ConfigAPI.GetString("server.icon"), DefaultIcon.texture.EncodeToPNG());
+        if (string.IsNullOrEmpty(ConfigAPI.GetString("server.name")))
+            ConfigAPI.SetString("server.name", "Angry Dash Server");
     }
     void RequestInfo(NetworkMessage netMsg)
     {
@@ -94,9 +108,9 @@ public class _NetworkManager : NetworkBehaviour
 
         m_Message.map = File.ReadAllText(path + "map.level");
 
-        if (!ConfigAPI.ParamExist("map.reloadForPlayers"))
-            ConfigAPI.SetBool("map.reloadForPlayers", true);
-        if (ConfigAPI.GetBool("map.reloadForPlayers"))
+        if (!ConfigAPI.ParamExist("map.reload_for_players"))
+            ConfigAPI.SetBool("map.reload_for_players", true);
+        if (ConfigAPI.GetBool("map.reload_for_players"))
             NetworkServer.SendToAll(MsgID.SendServerMap, m_Message);
     }
 
