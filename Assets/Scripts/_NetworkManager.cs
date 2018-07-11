@@ -83,7 +83,7 @@ public class _NetworkManager : NetworkBehaviour
         GetComponent<NetworkManager>().maxConnections = ConfigAPI.GetInt("players.limit");
 
         if (ConfigAPI.GetInt("server.port") < 500 | ConfigAPI.GetInt("server.port") > 65535 | !ConfigAPI.ParamExist("server.port"))
-            ConfigAPI.SetInt("server.port", 7777);
+            ConfigAPI.SetInt("server.port", 20000);
         if (ConfigAPI.GetInt("server.port") != GetComponent<NetworkManager>().networkPort)
         {
             GetComponent<NetworkManager>().networkPort = ConfigAPI.GetInt("server.port");
