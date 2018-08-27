@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 public class Terminal : MonoBehaviour {
 
@@ -14,6 +15,9 @@ public class Terminal : MonoBehaviour {
     public Color32[] textColor;
 
     List<Messages> MessagesList = new List<Messages>();
+    public string[] lastCMD = new string[0];
+    public int CMDnumber = -1;
+    public string CMDactual = "";
 
     void Start()
     {
@@ -23,12 +27,55 @@ public class Terminal : MonoBehaviour {
         Message("Server start");
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            if (CMDnumber <= -1)
+            {
+                CMDactual = IF.text;
+                CMDnumber = lastCMD.Length - 1;
+            }
+            else if (CMDnumber == 0)
+                return;
+            else CMDnumber = CMDnumber - 1;
+            IF.text = lastCMD[CMDnumber];
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            if (CMDnumber >= 0 & CMDnumber < lastCMD.Length - 1)
+            {
+                CMDnumber = CMDnumber + 1;
+                IF.text = lastCMD[CMDnumber];
+            }
+            else if (CMDnumber >= lastCMD.Length - 1)
+            {
+                CMDnumber = -1;
+                IF.text = CMDactual;
+            }
+        }
+    }
+
+    public void ValueChanged()
+    {
+        if (CMDnumber != -1)
+        {
+            if (IF.text != lastCMD[CMDnumber])
+            {
+                CMDactual = IF.text;
+                CMDnumber = -1;
+            }
+        }
+    }
+
     public void CommandEnter()
     {
         if (string.IsNullOrEmpty(IF.text))
             Message("Please enter a command", 1);
         else
         {
+            lastCMD = lastCMD.Union(new string[] { IF.text }).ToArray();
+            CMDactual = "";
             string cmd = IF.text.Split(new string[1] { " " }, System.StringSplitOptions.None)[0].ToLower();
             string[] args = IF.text.Replace(cmd + " ", "").Split(new string[1] { " " }, System.StringSplitOptions.None);
 
