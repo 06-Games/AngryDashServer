@@ -4,3 +4,4 @@
 |stop      | stop     | the server will be stopped |
 |reload    | reload   | reload the map and the config without disconecting players |
 |color     | color [HexColorNormalText] [HexColorInfoText] [HexColorErrorText]| change the color of the texts |
+|clear     | clear    | clear the console |
