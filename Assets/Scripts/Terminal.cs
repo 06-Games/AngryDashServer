@@ -124,6 +124,12 @@ public class Terminal : MonoBehaviour {
                 Message("Coded by EvanG", 1);
                 Message("©"+ DateTime.Now.Year+  " 06Games. All rights reserved.", 1);
             }
+            else if (cmd == "clear")
+            {
+                for (int i = 0; i < Viewport.transform.childCount; i++)
+                    Destroy(Viewport.transform.GetChild(i).gameObject);
+                Log.LogNewMessage("Terminal has been cleared", false);
+            }
             else Message(IF.text + " : unkown command", 1);
         }
 
