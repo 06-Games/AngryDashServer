@@ -54,6 +54,17 @@ public class Terminal : MonoBehaviour {
                 IF.text = CMDactual;
             }
         }
+
+        
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            CommandEnter();
+        }
+        if (IF.isFocused == false)
+        {
+            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(IF.gameObject, null);
+            IF.OnPointerClick(new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current));
+        }
     }
 
     public void ValueChanged()
